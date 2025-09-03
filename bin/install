@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 install_dmd() {
-	local install_type=$1
 	local version=$2
 	local install_path=$3
   local platform=""
@@ -21,9 +20,9 @@ install_dmd() {
   fi
 
   curl -L "http://downloads.dlang.org/releases/2.x/${version}/${filename}" -o "${tempdir}/${filename}"
-  unzip -q "${tempdir}/${filename}" -d $install_path || exit 1
+  unzip -q "${tempdir}/${filename}" -d "$install_path" || exit 1
 
   rm -rf "${tempdir}"
 }
 
-install_dmd $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
+install_dmd "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
