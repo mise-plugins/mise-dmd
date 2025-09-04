@@ -45,3 +45,4 @@ jobs:
           mise exec dmd -- dmd --version
           mise install dmd@nightly
           mise exec dmd@nightly -- dmd --version
+
