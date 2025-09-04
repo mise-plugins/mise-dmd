@@ -37,7 +37,7 @@ decompress() {
 
   if [[ "$filename" == *.zip ]]
   then
-    unzip -q "$filename" -d $install_path
+    unzip -q "$filename" -d "$install_path"
   elif [[ "$filename" == *.tar.xz ]]
   then
     tar -xf "$filename" -C "$install_path"
