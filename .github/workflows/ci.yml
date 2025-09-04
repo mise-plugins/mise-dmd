@@ -41,3 +41,5 @@ jobs:
           mise plugin link dmd $GITHUB_WORKSPACE
           mise install dmd@latest
           mise exec dmd -- dmd --version
+          mise install dmd@nightly
+          mise exec dmd@nightly -- dmd --version
