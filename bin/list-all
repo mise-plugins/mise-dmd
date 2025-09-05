@@ -71,4 +71,6 @@ extract_version_numbers() {
     echo "$versions"
 }
 
+echo nightly
 download_dmd_tags | extract_version_numbers | sort_tags
+

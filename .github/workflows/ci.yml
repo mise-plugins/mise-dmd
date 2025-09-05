@@ -10,21 +10,21 @@ jobs:
       - name: Run Shellcheck
         run: shellcheck bin/*
 
-  # plugin-test-macos:
-  #   runs-on: macOS-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Install mise
-  #       run: |
-  #         curl https://mise.run | sh
-  #         echo "$HOME/.local/bin" >> $GITHUB_PATH
-  #     - name: Test plugin
-  #       env:
-  #         GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       run: |
-  #         mise plugin link dmd $GITHUB_WORKSPACE
-  #         mise install dmd@latest
-  #         mise exec dmd -- dmd --version
+  plugin-test-macos:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install mise
+        run: |
+          curl https://mise.run | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Test plugin
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mise plugin link dmd $GITHUB_WORKSPACE
+          mise install dmd@nightly
+          mise exec dmd@nightly -- dmd --version
 
   plugin-test-linux:
     runs-on: ubuntu-latest
@@ -41,3 +41,6 @@ jobs:
           mise plugin link dmd $GITHUB_WORKSPACE
           mise install dmd@latest
           mise exec dmd -- dmd --version
+          mise install dmd@nightly
+          mise exec dmd@nightly -- dmd --version
+

@@ -6,11 +6,17 @@ install_dmd() {
   local platform=""
   local tempdir=""
   local filename=""
+  local dl_path="http://downloads.dlang.org/releases/2.x"
 
   [ "Linux" = "$(uname)" ] && platform="linux" || platform="osx"
   [ "linux" = "${platform}" ] && tempdir=$(mktemp -d asdf-dmd.XXXX) || tempdir=$(/usr/bin/mktemp -dt asdf-dmd)
 
-  if [[ $2 < "2.065.0" ]]
+  if [[ $version = "nightly" ]]
+  then
+    # nightly is available on GitHub but uses master in the filename
+    dl_path="https://github.com/dlang/dmd/releases/download"
+    filename="dmd.master.${platform}.tar.xz"
+  elif [[ $version < "2.065.0" ]]
   then
     # 2.064 or before have single zip file
     filename="dmd.${version}.zip"
@@ -19,10 +25,26 @@ install_dmd() {
     filename="dmd.${version}.${platform}.zip"
   fi
 
-  curl -L "http://downloads.dlang.org/releases/2.x/${version}/${filename}" -o "${tempdir}/${filename}"
-  unzip -q "${tempdir}/${filename}" -d "$install_path" || exit 1
+  curl -L "${dl_path}/${version}/${filename}" -o "${tempdir}/${filename}"
+  decompress "${tempdir}/${filename}" "$install_path" || exit 1
 
   rm -rf "${tempdir}"
+}
+
+decompress() {
+  local filename=$1
+  local install_path=$2
+
+  if [[ "$filename" == *.zip ]]
+  then
+    unzip -q "$filename" -d "$install_path"
+  elif [[ "$filename" == *.tar.xz ]]
+  then
+    tar -xf "$filename" -C "$install_path"
+  else
+    echo "Unsupported compression format"
+    exit 1
+  fi
 }
 
 install_dmd "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
