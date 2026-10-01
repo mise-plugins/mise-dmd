@@ -25,7 +25,13 @@ install_dmd() {
     filename="dmd.${version}.${platform}.zip"
   fi
 
-  curl -L "${dl_path}/${version}/${filename}" -o "${tempdir}/${filename}"
+  if ! curl -fsSL "${dl_path}/${version}/${filename}" -o "${tempdir}/${filename}"
+  then
+    # 2.112.1 and later ship tar.xz archives instead of per-OS zip files
+    [[ "$filename" == *.zip ]] || exit 1
+    filename="${filename%.zip}.tar.xz"
+    curl -fsSL "${dl_path}/${version}/${filename}" -o "${tempdir}/${filename}" || exit 1
+  fi
   decompress "${tempdir}/${filename}" "$install_path" || exit 1
 
   rm -rf "${tempdir}"
